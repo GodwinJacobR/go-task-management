@@ -1,11 +1,15 @@
 package app
 
 import (
+	"errors"
+
 	"github.com/GodwinJacobR/go-todo-app/internal/db"
+	"github.com/gorilla/mux"
 )
 
 type App struct {
-	db *db.Db
+	db     *db.Db
+	router *mux.Router
 }
 
 func New() *App {
@@ -14,12 +18,22 @@ func New() *App {
 		return nil
 	}
 
-	// Initialize server
 	return &App{
-		db: db,
+		db:     db,
+		router: mux.NewRouter(),
 	}
 }
 
 func (a *App) Start() error {
 	return nil
+}
+
+func (a *App) Stop() error {
+	return errors.Join(
+		a.db.Close(),
+	)
+}
+
+func (a *App) GetRouter() *mux.Router {
+	return a.router
 }

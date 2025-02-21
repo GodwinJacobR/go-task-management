@@ -10,9 +10,10 @@ type Component interface {
 }
 
 func Init() {
+	app := app.New()
 	components := []Component{
-		app.New(),
-		http.New(),
+		app,
+		http.New(app.GetRouter()),
 	}
 	for _, component := range components {
 		if err := component.Start(); err != nil {

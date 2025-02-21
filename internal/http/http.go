@@ -2,17 +2,21 @@ package http
 
 import (
 	"context"
+	"net"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type HttpServer struct {
 	inner *http.Server
 }
 
-func New() *HttpServer {
+func New(router *mux.Router) *HttpServer {
 	return &HttpServer{
 		inner: &http.Server{
-			Addr: "3000", // TODO get from config
+			Handler: router,
+			Addr:    net.JoinHostPort("localhost", "3000"), // TODO get from config
 		},
 	}
 }
