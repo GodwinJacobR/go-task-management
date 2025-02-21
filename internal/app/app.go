@@ -28,7 +28,7 @@ func New() *App {
 func (a *App) Start() error {
 	return errors.Join(
 		a.db.Migrate(),
-		get_tasks.Setup(a.router),
+		get_tasks.Setup(a.router, a.db.GetDB()),
 	)
 }
 
