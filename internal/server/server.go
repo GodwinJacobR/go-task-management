@@ -1,35 +1,22 @@
 package server
 
 import (
-	"context"
-	"net/http"
-
-	"github.com/GodwinJacobR/go-todo-app/internal/db"
+	"github.com/GodwinJacobR/go-todo-app/internal/app"
+	"github.com/GodwinJacobR/go-todo-app/internal/http"
 )
 
-type Server struct {
-	srv *http.Server
-	db  *db.Db
+type Component interface {
+	Start() error
 }
 
-func New(cfg config.ServerConfig, db *db.Db) (*Server, error) {
-	return &Server{
-		srv: &http.Server{
-			Addr: cfg.Port,
-		},
-		db: db,
-	}, nil
-}
-
-func (s *Server) Start(ctx context.Context) error {
-	go func() {
-		if err := s.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+func Init() {
+	components := []Component{
+		app.New(),
+		http.New(),
+	}
+	for _, component := range components {
+		if err := component.Start(); err != nil {
 			panic(err)
 		}
-	}()
-	return nil
-}
-
-func (s *Server) Shutdown(ctx context.Context) error {
-	return s.srv.Shutdown(ctx)
+	}
 }
