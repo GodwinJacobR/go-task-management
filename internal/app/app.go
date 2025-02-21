@@ -15,7 +15,7 @@ type App struct {
 func New() *App {
 	db, err := db.New()
 	if err != nil {
-		return nil
+		panic(err)
 	}
 
 	return &App{
@@ -25,7 +25,9 @@ func New() *App {
 }
 
 func (a *App) Start() error {
-	return nil
+	return errors.Join(
+		a.db.Migrate(),
+	)
 }
 
 func (a *App) Stop() error {
