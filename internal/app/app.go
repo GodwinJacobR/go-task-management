@@ -5,7 +5,9 @@ import (
 
 	"github.com/GodwinJacobR/go-todo-app/internal/db"
 	"github.com/GodwinJacobR/go-todo-app/internal/features/add_task"
+	"github.com/GodwinJacobR/go-todo-app/internal/features/convert_to_subtask"
 	"github.com/GodwinJacobR/go-todo-app/internal/features/get_tasks"
+	"github.com/GodwinJacobR/go-todo-app/internal/features/promote_task"
 	"github.com/gorilla/mux"
 )
 
@@ -29,14 +31,16 @@ func New() *App {
 func (a *App) Start() error {
 	return errors.Join(
 		a.db.Migrate(),
-		a.SetupFeatures(),
+		a.setupFeatures(),
 	)
 }
 
-func (a *App) SetupFeatures() error {
+func (a *App) setupFeatures() error {
 	return errors.Join(
 		get_tasks.Setup(a.router, a.db.GetDB()),
 		add_task.Setup(a.router, a.db.GetDB()),
+		convert_to_subtask.Setup(a.router, a.db.GetDB()),
+		promote_task.Setup(a.router, a.db.GetDB()),
 	)
 }
 

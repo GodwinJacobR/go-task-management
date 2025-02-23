@@ -1,4 +1,4 @@
-package add_task
+package promote_task
 
 import (
 	"database/sql"
@@ -10,6 +10,6 @@ import (
 func Setup(r *mux.Router, db *sql.DB) error {
 	h := NewHandler(db)
 
-	r.HandleFunc("/tasks/{task_id}", httpHandler(h)).Methods(http.MethodPost)
+	r.HandleFunc("/promote-task/{task_id}", httpHandler(h)).Methods(http.MethodPut)
 	return nil
 }

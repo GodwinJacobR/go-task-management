@@ -1,4 +1,4 @@
-package add_task
+package convert_to_subtask
 
 import (
 	"database/sql"
@@ -10,6 +10,6 @@ import (
 func Setup(r *mux.Router, db *sql.DB) error {
 	h := NewHandler(db)
 
-	r.HandleFunc("/tasks/{task_id}", httpHandler(h)).Methods(http.MethodPost)
+	r.HandleFunc("/convert-to-subtask", httpHandler(h)).Methods(http.MethodPut)
 	return nil
 }

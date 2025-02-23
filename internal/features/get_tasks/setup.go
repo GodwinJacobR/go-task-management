@@ -2,6 +2,7 @@ package get_tasks
 
 import (
 	"database/sql"
+	"net/http"
 
 	"github.com/gorilla/mux"
 )
@@ -9,6 +10,6 @@ import (
 func Setup(r *mux.Router, db *sql.DB) error {
 	h := NewHandler(db)
 
-	r.HandleFunc("/tasks", httpHandler(h)).Methods("GET")
+	r.HandleFunc("/tasks", httpHandler(h)).Methods(http.MethodGet)
 	return nil
 }
