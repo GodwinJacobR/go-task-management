@@ -8,7 +8,7 @@ type Task struct {
 	ParentTaskID *string
 	Title        string
 	Description  string
-	DueDate      string
+	DueDate      time.Time
 	Completed    bool
 	Attributes   map[string]interface{}
 	CreatedAt    time.Time
@@ -42,11 +42,16 @@ func buildSubTasks(tasks []Task, childrenMap map[string][]Task) []TaskResponse {
 
 	for i, task := range tasks {
 		response := TaskResponse{
-			ID:          task.TaskID,
-			Title:       task.Title,
-			Description: task.Description,
-			CreatedAt:   task.CreatedAt,
-			UpdatedAt:   task.UpdatedAt,
+			TaskID:       task.TaskID,
+			UserID:       task.UserID,
+			ParentTaskID: task.ParentTaskID,
+			Title:        task.Title,
+			Description:  task.Description,
+			CreatedAt:    task.CreatedAt,
+			DueDate:      task.DueDate,
+			Completed:    task.Completed,
+			Attributes:   task.Attributes,
+			UpdatedAt:    task.UpdatedAt,
 		}
 
 		// Recursively build subtasks if they exist
@@ -61,10 +66,15 @@ func buildSubTasks(tasks []Task, childrenMap map[string][]Task) []TaskResponse {
 }
 
 type TaskResponse struct {
-	ID          string         `json:"id"`
-	Title       string         `json:"title"`
-	Description string         `json:"description"`
-	SubTasks    []TaskResponse `json:"sub_tasks,omitempty"`
-	CreatedAt   time.Time      `json:"created_at"`
-	UpdatedAt   time.Time      `json:"updated_at"`
+	TaskID       string
+	UserID       string
+	ParentTaskID *string
+	Title        string
+	Description  string
+	DueDate      time.Time
+	Completed    bool
+	Attributes   map[string]interface{}
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	SubTasks     []TaskResponse
 }

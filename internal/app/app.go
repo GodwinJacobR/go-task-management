@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/GodwinJacobR/go-todo-app/internal/db"
+	"github.com/GodwinJacobR/go-todo-app/internal/features/add_task"
 	"github.com/GodwinJacobR/go-todo-app/internal/features/get_tasks"
 	"github.com/gorilla/mux"
 )
@@ -28,7 +29,14 @@ func New() *App {
 func (a *App) Start() error {
 	return errors.Join(
 		a.db.Migrate(),
+		a.SetupFeatures(),
+	)
+}
+
+func (a *App) SetupFeatures() error {
+	return errors.Join(
 		get_tasks.Setup(a.router, a.db.GetDB()),
+		add_task.Setup(a.router, a.db.GetDB()),
 	)
 }
 

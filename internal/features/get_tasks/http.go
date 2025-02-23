@@ -7,7 +7,7 @@ import (
 
 func httpHandler(h *handler) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tasks, err := h.GetTasks(w, r)
+		tasks, err := h.GetTasks(r.Context())
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

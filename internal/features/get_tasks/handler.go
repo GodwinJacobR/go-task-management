@@ -1,8 +1,8 @@
 package get_tasks
 
 import (
+	"context"
 	"database/sql"
-	"net/http"
 
 	"github.com/GodwinJacobR/go-todo-app/internal/domain/task"
 )
@@ -17,8 +17,8 @@ func NewHandler(db *sql.DB) *handler {
 	}
 }
 
-func (h *handler) GetTasks(w http.ResponseWriter, r *http.Request) ([]task.TaskResponse, error) {
-	tasks, err := h.repo.GetTasks(r.Context())
+func (h *handler) GetTasks(ctx context.Context) ([]task.TaskResponse, error) {
+	tasks, err := h.repo.GetTasks(ctx)
 	if err != nil {
 		return []task.TaskResponse{}, err
 	}

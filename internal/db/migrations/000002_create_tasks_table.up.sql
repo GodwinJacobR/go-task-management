@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS tasks (
     task_id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL,
+    user_id UUID NOT NULL,
     parent_task_id INTEGER,
     title VARCHAR(255) NOT NULL,
     description TEXT,
