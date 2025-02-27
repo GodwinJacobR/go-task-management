@@ -1,4 +1,4 @@
-module github.com/GodwinJacobR/go-task-manager
+module github.com/GodwinJacobR/go-todo-app
 
 go 1.23.5
 
