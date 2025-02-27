@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	domain_errors "github.com/GodwinJacobR/go-todo-app/internal/domain/errors"
+	domain_errors "github.com/GodwinJacobR/go-todo-app/backend/internal/domain/errors"
 	"github.com/gorilla/mux"
 )
 

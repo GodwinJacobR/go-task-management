@@ -3,11 +3,11 @@ package app
 import (
 	"errors"
 
-	"github.com/GodwinJacobR/go-todo-app/internal/db"
-	"github.com/GodwinJacobR/go-todo-app/internal/features/add_task"
-	"github.com/GodwinJacobR/go-todo-app/internal/features/convert_to_subtask"
-	"github.com/GodwinJacobR/go-todo-app/internal/features/get_tasks"
-	"github.com/GodwinJacobR/go-todo-app/internal/features/promote_task"
+	"github.com/GodwinJacobR/go-todo-app/backend/internal/db"
+	"github.com/GodwinJacobR/go-todo-app/backend/internal/features/add_task"
+	"github.com/GodwinJacobR/go-todo-app/backend/internal/features/convert_to_subtask"
+	"github.com/GodwinJacobR/go-todo-app/backend/internal/features/get_tasks"
+	"github.com/GodwinJacobR/go-todo-app/backend/internal/features/promote_task"
 	"github.com/gorilla/mux"
 )
 

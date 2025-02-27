@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	domain_errors "github.com/GodwinJacobR/go-todo-app/internal/domain/errors"
+	domain_errors "github.com/GodwinJacobR/go-todo-app/backend/internal/domain/errors"
 )
 
 func httpHandler(h *handler) func(w http.ResponseWriter, r *http.Request) {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/GodwinJacobR/go-todo-app/internal/domain/errors"
+	"github.com/GodwinJacobR/go-todo-app/backend/internal/domain/errors"
 )
 
 type repo struct {

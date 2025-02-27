@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/GodwinJacobR/go-todo-app/internal/domain/task"
+	"github.com/GodwinJacobR/go-todo-app/backend/internal/domain/task"
 )
 
 type repo struct {
