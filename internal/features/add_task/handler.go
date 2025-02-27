@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/GodwinJacobR/go-todo-app/internal/domain/task"
+	"github.com/GodwinJacobR/go-task-manager/internal/domain/task"
 )
 
 type handler struct {

@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/GodwinJacobR/go-todo-app/internal/app"
-	"github.com/GodwinJacobR/go-todo-app/internal/http"
+	"github.com/GodwinJacobR/go-task-manager/internal/app"
+	"github.com/GodwinJacobR/go-task-manager/internal/http"
 )
 
 type Component interface {

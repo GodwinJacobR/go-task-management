@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/GodwinJacobR/go-todo-app/internal/server"
+	"github.com/GodwinJacobR/go-task-manager/internal/server"
 )
 
 func main() {
