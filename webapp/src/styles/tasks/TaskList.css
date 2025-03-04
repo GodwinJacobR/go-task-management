@@ -1,0 +1,28 @@
+/* Tasks grid */
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* No tasks message */
+.no-tasks-message {
+  text-align: center;
+  padding: 30px;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  grid-column: 1 / -1;
+  color: var(--text-light);
+  font-size: 18px;
+  margin: 20px auto;
+  max-width: 500px;
+  border: 1px dashed var(--border-color);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .tasks-grid {
+    grid-template-columns: 1fr;
+  }
+} 

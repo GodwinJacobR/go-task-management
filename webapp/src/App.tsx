@@ -1,7 +1,8 @@
-import React, { useState, FormEvent } from 'react';
-import Task from './components/Task';
+import React, { useState, FormEvent, useCallback } from 'react';
+import { Task } from './components/tasks';
 import { Task as TaskType } from './types';
-import './App.css';
+import './styles/tasks/Task.css';
+import './styles/tasks/TaskList.css';
 
 function App() {
   const [tasks, setTasks] = useState<TaskType[]>([
@@ -9,127 +10,105 @@ function App() {
       id: 1, 
       text: 'Complete React tutorial', 
       completed: false, 
-      subtasks: [],
       isExpanded: false 
     },
+    { 
+      id: 2, 
+      text: 'Learn about React Router', 
+      completed: false, 
+      isExpanded: false 
+    },
+    { 
+      id: 3, 
+      text: 'Build a todo application', 
+      completed: false, 
+      isExpanded: false 
+    }
   ]);
 
   const [newTask, setNewTask] = useState<string>('');
-  const [nextId, setNextId] = useState<number>(2);
+  const [nextId, setNextId] = useState<number>(4);
 
-  const addTask = (e: FormEvent<HTMLFormElement>) => {
+  // Add new top-level task
+  const addTask = useCallback((e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newTask.trim() !== '') {
-      setTasks([
-        ...tasks,
+      const currentId = nextId;
+      setTasks(prevTasks => [
+        ...prevTasks,
         { 
-          id: nextId, 
+          id: currentId, 
           text: newTask, 
           completed: false,
-          subtasks: [],
           isExpanded: false 
         }
       ]);
-      setNextId(nextId + 1);
+      setNextId(currentId + 1);
       setNewTask('');
     }
-  };
+  }, [newTask, nextId]);
 
-  const toggleTask = (id: number): void => {
-    const toggleTaskRecursive = (tasks: TaskType[]): TaskType[] => {
-      return tasks.map(task => {
-        if (task.id === id) {
-          return {
-            ...task,
-            completed: !task.completed,
-            subtasks: task.subtasks.map(subtask => ({
-              ...subtask,
-              completed: !task.completed
-            }))
-          };
-        }
-        return {
-          ...task,
-          subtasks: toggleTaskRecursive(task.subtasks)
-        };
-      });
-    };
+  // Toggle task completion status
+  const toggleTask = useCallback((id: number): void => {
+    setTasks(prevTasks => 
+      prevTasks.map(task => 
+        task.id === id 
+          ? {...task, completed: !task.completed}
+          : task
+      )
+    );
+  }, []);
 
-    setTasks(toggleTaskRecursive(tasks));
-  };
-
-  const toggleExpand = (id: number): void => {
-    const toggleExpandRecursive = (tasks: TaskType[]): TaskType[] => {
-      return tasks.map(task => {
-        if (task.id === id) {
-          return { ...task, isExpanded: !task.isExpanded };
-        }
-        return {
-          ...task,
-          subtasks: toggleExpandRecursive(task.subtasks)
-        };
-      });
-    };
-
-    setTasks(toggleExpandRecursive(tasks));
-  };
-
-  const addSubtask = (parentId: number, text: string): void => {
-    const addSubtaskRecursive = (tasks: TaskType[]): TaskType[] => {
-      return tasks.map(task => {
-        if (task.id === parentId) {
-          return {
-            ...task,
-            subtasks: [
-              ...task.subtasks,
-              {
-                id: nextId,
-                text,
-                completed: false,
-                subtasks: [],
-                isExpanded: false
-              }
-            ]
-          };
-        }
-        return {
-          ...task,
-          subtasks: addSubtaskRecursive(task.subtasks)
-        };
-      });
-    };
-
-    setTasks(addSubtaskRecursive(tasks));
-    setNextId(nextId + 1);
-  };
+  // Toggle expand/collapse of task
+  const toggleExpand = useCallback((id: number): void => {
+    setTasks(prevTasks => 
+      prevTasks.map(task => 
+        task.id === id 
+          ? {...task, isExpanded: !task.isExpanded}
+          : task
+      )
+    );
+  }, []);
 
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>My Task List</h1>
-        
-        <form onSubmit={addTask} className="add-task-form">
-          <input
-            type="text"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Add a new task"
-          />
-          <button type="submit">Add Task</button>
-        </form>
-
-        <ul className="task-list">
-          {tasks.map(task => (
-            <Task
-              key={task.id}
-              task={task}
-              onToggleTask={toggleTask}
-              onToggleExpand={toggleExpand}
-              onAddSubtask={addSubtask}
+      <div className="app-container">
+        <header className="app-header">
+          <h1>My Task List</h1>
+          
+          <form onSubmit={addTask} className="add-task-form">
+            <input
+              type="text"
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+              placeholder="Add a new task"
+              className="add-task-input"
             />
-          ))}
-        </ul>
-      </header>
+            <button 
+              type="submit" 
+              className="add-task-button"
+              disabled={newTask.trim() === ''}
+            >
+              Add Task
+            </button>
+          </form>
+        </header>
+
+        <div className="tasks-grid">
+          {tasks.length === 0 ? (
+            <p className="no-tasks-message">No tasks yet. Add a task to get started!</p>
+          ) : (
+            tasks.map(task => (
+              <Task
+                key={task.id}
+                task={task}
+                onToggleTask={toggleTask}
+                onToggleExpand={toggleExpand}
+              />
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }
