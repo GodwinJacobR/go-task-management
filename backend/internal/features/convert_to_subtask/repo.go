@@ -15,7 +15,7 @@ func NewRepo(db *sql.DB) *repo {
 	return &repo{db: db}
 }
 
-func (r *repo) ConvertToSubTask(ctx context.Context, taskID, newParentTaskID string) error {
+func (r *repo) convertToSubTask(ctx context.Context, taskID, newParentTaskID string) error {
 	query := `UPDATE tasks
 		SET parent_task_id = $1,
 			updated_at = NOW()

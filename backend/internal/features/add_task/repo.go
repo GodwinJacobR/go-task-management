@@ -17,7 +17,7 @@ func NewRepo(db *sql.DB) *repo {
 	return &repo{db: db}
 }
 
-func (r *repo) AddTask(ctx context.Context, task task.Task) error {
+func (r *repo) addTask(ctx context.Context, task task.Task) error {
 	query := `
 		INSERT INTO tasks (
 			task_id,
@@ -32,6 +32,7 @@ func (r *repo) AddTask(ctx context.Context, task task.Task) error {
 		) VALUES (
 			$1, $2, $3, $4, $5, $6, $7, $8, $9
 		)
+		ON CONFLICT (task_id) DO NOTHING 
 	`
 
 	attributesJSON, err := json.Marshal(task.Attributes)

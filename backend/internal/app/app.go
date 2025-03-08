@@ -8,6 +8,7 @@ import (
 	"github.com/GodwinJacobR/go-todo-app/backend/internal/features/convert_to_subtask"
 	"github.com/GodwinJacobR/go-todo-app/backend/internal/features/get_tasks"
 	"github.com/GodwinJacobR/go-todo-app/backend/internal/features/promote_task"
+	"github.com/GodwinJacobR/go-todo-app/backend/internal/features/toggle_completion"
 	"github.com/gorilla/mux"
 )
 
@@ -41,6 +42,7 @@ func (a *App) setupFeatures() error {
 		add_task.Setup(a.router, a.db.GetDB()),
 		convert_to_subtask.Setup(a.router, a.db.GetDB()),
 		promote_task.Setup(a.router, a.db.GetDB()),
+		toggle_completion.Setup(a.router, a.db.GetDB()),
 	)
 }
 

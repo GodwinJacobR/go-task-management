@@ -11,7 +11,7 @@ import (
 func httpHandler(h *handler) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		taskID := mux.Vars(r)["task_id"]
-		err := h.PromoteTask(r.Context(), taskID)
+		err := h.promoteTask(r.Context(), taskID)
 		if err != nil {
 			if errors.Is(err, domain_errors.ErrConcurrentModification) {
 				http.Error(w, "Task was modified by another user", http.StatusConflict)

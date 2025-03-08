@@ -17,8 +17,8 @@ func NewHandler(db *sql.DB) *handler {
 	}
 }
 
-func (h *handler) GetTasks(ctx context.Context) ([]task.TaskResponse, error) {
-	tasks, err := h.repo.GetTasks(ctx)
+func (h *handler) getTasks(ctx context.Context, state string) ([]task.TaskResponse, error) {
+	tasks, err := h.repo.getTasks(ctx, state)
 	if err != nil {
 		return []task.TaskResponse{}, err
 	}

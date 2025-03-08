@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"strings"
 
 	"github.com/GodwinJacobR/go-todo-app/backend/internal/domain/task"
 )
@@ -16,12 +17,32 @@ func NewRepo(db *sql.DB) *repo {
 	return &repo{db: db}
 }
 
-func (r *repo) GetTasks(ctx context.Context) ([]task.Task, error) {
+func (r *repo) getTasks(ctx context.Context, state string) ([]task.Task, error) {
+
 	query := `
 		SELECT  task_id, user_id, parent_task_id, title, description, due_date, completed, attributes, created_at, updated_at
 		FROM tasks
 		ORDER BY created_at DESC
 	`
+
+	// TODO maybe split this into different funcs ?
+	if strings.EqualFold(state, "completed") {
+		query = `
+		SELECT  task_id, user_id, parent_task_id, title, description, due_date, completed, attributes, created_at, updated_at
+		FROM tasks
+		WHERE completed = true
+		ORDER BY created_at DESC
+	`
+	}
+
+	if strings.EqualFold(state, "active") {
+		query = `
+		SELECT  task_id, user_id, parent_task_id, title, description, due_date, completed, attributes, created_at, updated_at
+		FROM tasks
+		WHERE completed = false
+		ORDER BY created_at DESC
+	`
+	}
 
 	rows, err := r.db.QueryContext(ctx, query)
 	if err != nil {

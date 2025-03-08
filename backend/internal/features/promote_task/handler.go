@@ -15,6 +15,6 @@ func NewHandler(db *sql.DB) *handler {
 	}
 }
 
-func (h *handler) PromoteTask(ctx context.Context, taskID string) error {
-	return h.repo.PromoteTask(ctx, taskID)
+func (h *handler) promoteTask(ctx context.Context, taskID string) error {
+	return h.repo.promoteTask(ctx, taskID)
 }

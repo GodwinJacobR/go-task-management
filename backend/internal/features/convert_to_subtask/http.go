@@ -17,7 +17,7 @@ func httpHandler(h *handler) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err := h.ConvertToSubTask(r.Context(), req.TaskID, req.NewParentTaskID)
+		err := h.convertToSubTask(r.Context(), req.TaskID, req.NewParentTaskID)
 		if err != nil {
 			if errors.Is(err, domain_errors.ErrConcurrentModification) {
 				http.Error(w, "Task was modified by another user", http.StatusConflict)

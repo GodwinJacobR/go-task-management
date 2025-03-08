@@ -15,6 +15,6 @@ func NewHandler(db *sql.DB) *handler {
 	}
 }
 
-func (h *handler) ConvertToSubTask(ctx context.Context, taskID, newParentTaskID string) error {
-	return h.repo.ConvertToSubTask(ctx, taskID, newParentTaskID)
+func (h *handler) convertToSubTask(ctx context.Context, taskID, newParentTaskID string) error {
+	return h.repo.convertToSubTask(ctx, taskID, newParentTaskID)
 }

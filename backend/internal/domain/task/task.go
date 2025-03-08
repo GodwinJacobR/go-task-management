@@ -16,8 +16,8 @@ type Task struct {
 	SubTasks     []Task
 }
 
+// TODO use postgres recursive query to get tasks with subtasks instead of doing it in memory
 func BuildTaskHierarchy(tasks []Task) []TaskResponse {
-	// Create a map of task ID to its children
 	childrenMap := make(map[string][]Task)
 	for _, task := range tasks {
 		if task.ParentTaskID != nil {
@@ -25,7 +25,6 @@ func BuildTaskHierarchy(tasks []Task) []TaskResponse {
 		}
 	}
 
-	// Find root tasks (tasks with no parent)
 	var rootTasks []Task
 	for _, task := range tasks {
 		if task.ParentTaskID == nil {
@@ -33,7 +32,6 @@ func BuildTaskHierarchy(tasks []Task) []TaskResponse {
 		}
 	}
 
-	// Build the hierarchy starting from root tasks
 	return buildSubTasks(rootTasks, childrenMap)
 }
 
@@ -54,7 +52,6 @@ func buildSubTasks(tasks []Task, childrenMap map[string][]Task) []TaskResponse {
 			UpdatedAt:    task.UpdatedAt,
 		}
 
-		// Recursively build subtasks if they exist
 		if children, exists := childrenMap[task.TaskID]; exists {
 			response.SubTasks = buildSubTasks(children, childrenMap)
 		}

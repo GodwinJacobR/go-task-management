@@ -17,6 +17,6 @@ func NewHandler(db *sql.DB) *handler {
 	}
 }
 
-func (h *handler) AddTask(ctx context.Context, task task.Task) error {
-	return h.repo.AddTask(ctx, task)
+func (h *handler) addTask(ctx context.Context, task task.Task) error {
+	return h.repo.addTask(ctx, task)
 }

@@ -15,7 +15,7 @@ func NewRepo(db *sql.DB) *repo {
 	return &repo{db: db}
 }
 
-func (r *repo) PromoteTask(ctx context.Context, taskID string) error {
+func (r *repo) promoteTask(ctx context.Context, taskID string) error {
 	query := `UPDATE tasks
 		SET parent_task_id = NULL,
 			updated_at = NOW()

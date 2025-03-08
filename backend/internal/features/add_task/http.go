@@ -21,7 +21,7 @@ func httpHandler(h *handler) func(w http.ResponseWriter, r *http.Request) {
 		}
 		defer r.Body.Close()
 
-		if err := h.AddTask(r.Context(), newTask); err != nil {
+		if err := h.addTask(r.Context(), newTask); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
