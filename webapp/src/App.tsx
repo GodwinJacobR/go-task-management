@@ -1,3 +1,4 @@
+// App.tsx
 import React, { useState, FormEvent, useCallback } from 'react';
 import { Task } from './components/tasks';
 import { Task as TaskType } from './types';
@@ -75,7 +76,6 @@ function App() {
       <div className="app-container">
         <header className="app-header">
           <h1>My Task List</h1>
-          
           <form onSubmit={addTask} className="add-task-form">
             <input
               type="text"

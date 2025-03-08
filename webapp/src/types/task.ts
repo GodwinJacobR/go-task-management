@@ -1,6 +1,6 @@
 export interface Task {
-  id: number;
-  text: string;
-  completed: boolean;
-  isExpanded: boolean;
-} 
+    id: number;
+    text: string;
+    completed: boolean;
+    isExpanded: boolean;
+  } 

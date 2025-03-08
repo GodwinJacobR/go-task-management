@@ -1,68 +1,68 @@
 /* Task tile */
 .task-tile {
-  background: white;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
-  padding: 15px;
-  border: 1px solid var(--border-color);
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.task-tile:hover {
-  border-color: var(--primary-color);
-}
-
-.task-tile-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  gap: 10px;
-}
-
-.task-checkbox {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--border-color);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  font-size: 14px;
-}
-
-.task-checkbox.checked {
-  background-color: var(--success-color);
-  border-color: var(--success-color);
-  color: white;
-}
-
-.task-title {
-  margin: 0;
-  font-size: 18px;
-  text-align: left;
-  flex: 1;
-  word-break: break-word;
-}
-
-.task-title.completed {
-  text-decoration: line-through;
-  color: var(--text-light);
-}
-
-.task-tile-content {
-  margin-top: auto;
-}
-
-.task-status-badge {
-  display: inline-block;
-  padding: 4px 8px;
-  font-size: 12px;
-  border-radius: 4px;
-  background-color: var(--light-color);
-  color: var(--text-light);
-  margin-top: 10px;
-} 
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .task-tile:hover {
+    border-color: var(--primary-color);
+  }
+  
+  .task-tile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+  
+  .task-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+  
+  .task-checkbox.checked {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+  }
+  
+  .task-title {
+    margin: 0;
+    font-size: 18px;
+    text-align: left;
+    flex: 1;
+    word-break: break-word;
+  }
+  
+  .task-title.completed {
+    text-decoration: line-through;
+    color: var(--text-light);
+  }
+  
+  .task-tile-content {
+    margin-top: auto;
+  }
+  
+  .task-status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    background-color: var(--light-color);
+    color: var(--text-light);
+    margin-top: 10px;
+  } 
