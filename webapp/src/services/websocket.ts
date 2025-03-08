@@ -53,11 +53,7 @@ export class MouseTrackingService {
 
     this.updateStatus(ConnectionStatus.CONNECTING);
     
-    // For development, use localhost if hostname is localhost
-    const hostname = window.location.hostname === 'localhost' ? 'localhost' : window.location.hostname;
-    const port = 3001; // Backend WebSocket server port
-    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${wsProtocol}//${hostname}:${port}/ws/track?user_id=${this.userId}`;
+    const wsUrl = `ws//localhost:3001/ws/track?user_id=${this.userId}`;
     
     console.log('Connecting to WebSocket at:', wsUrl);
     
