@@ -1,6 +1,8 @@
 export interface Task {
-    id: number;
-    text: string;
+    taskID: string;
+    title: string;
     completed: boolean;
-    isExpanded: boolean;
+    createdAt: string;
+    updatedAt: string;
+    subTasks: Task[];
   } 

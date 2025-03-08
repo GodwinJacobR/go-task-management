@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/http"
 
+	"github.com/GodwinJacobR/go-todo-app/backend/internal/http/middlewares"
 	"github.com/gorilla/mux"
 )
 
@@ -13,10 +14,12 @@ type HttpServer struct {
 }
 
 func New(router *mux.Router) *HttpServer {
+	router.Use(middlewares.CorsMiddleware)
+
 	return &HttpServer{
 		inner: &http.Server{
 			Handler: router,
-			Addr:    net.JoinHostPort("localhost", "3000"), // TODO get from config
+			Addr:    net.JoinHostPort("localhost", "3001"), // TODO get from config
 		},
 	}
 }

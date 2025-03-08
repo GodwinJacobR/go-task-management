@@ -4,15 +4,9 @@ import { Task } from './';
 
 interface ActiveTasksProps {
   tasks: TaskType[];
-  onToggleTask: (id: number) => void;
-  onToggleExpand: (id: number) => void;
 }
 
-const ActiveTasks: React.FC<ActiveTasksProps> = ({
-  tasks,
-  onToggleTask,
-  onToggleExpand,
-}) => {
+const ActiveTasks: React.FC<ActiveTasksProps> = ({ tasks }) => {
   const activeTasks = tasks.filter(task => !task.completed);
 
   return (
@@ -27,10 +21,8 @@ const ActiveTasks: React.FC<ActiveTasksProps> = ({
         ) : (
           activeTasks.map(task => (
             <Task
-              key={task.id}
+              key={task.taskID}
               task={task}
-              onToggleTask={onToggleTask}
-              onToggleExpand={onToggleExpand}
             />
           ))
         )}

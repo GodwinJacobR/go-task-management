@@ -4,15 +4,9 @@ import { Task } from './';
 
 interface CompletedTasksProps {
   tasks: TaskType[];
-  onToggleTask: (id: number) => void;
-  onToggleExpand: (id: number) => void;
 }
 
-const CompletedTasks: React.FC<CompletedTasksProps> = ({
-  tasks,
-  onToggleTask,
-  onToggleExpand,
-}) => {
+const CompletedTasks: React.FC<CompletedTasksProps> = ({ tasks }) => {
   const completedTasks = tasks.filter(task => task.completed);
 
   return (
@@ -27,10 +21,8 @@ const CompletedTasks: React.FC<CompletedTasksProps> = ({
         ) : (
           completedTasks.map(task => (
             <Task
-              key={task.id}
+              key={task.taskID}
               task={task}
-              onToggleTask={onToggleTask}
-              onToggleExpand={onToggleExpand}
             />
           ))
         )}

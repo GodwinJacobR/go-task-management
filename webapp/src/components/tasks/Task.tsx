@@ -5,24 +5,13 @@ import '../../styles/tasks/Task.css';
 
 interface TaskProps {
   task: TaskType;
-  onToggleTask: (id: number) => void;
-  onToggleExpand: (id: number) => void;
 }
 
-const Task: React.FC<TaskProps> = ({
-  task,
-  onToggleTask,
-  onToggleExpand,
-}) => {
+const Task: React.FC<TaskProps> = ({ task }) => {
   const navigate = useNavigate();
 
   const handleTaskClick = () => {
-    navigate(`/task/${task.id}`);
-  };
-
-  const handleCheckboxClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent navigation when clicking the checkbox
-    onToggleTask(task.id);
+    navigate(`/task/${task.taskID}`);
   };
 
   return (
@@ -31,14 +20,11 @@ const Task: React.FC<TaskProps> = ({
       onClick={handleTaskClick}
     >
       <div className="task-tile-header">
-        <div 
-          className={`task-checkbox ${task.completed ? 'checked' : ''}`}
-          onClick={handleCheckboxClick}
-        >
+        <div className={`task-checkbox ${task.completed ? 'checked' : ''}`}>
           {task.completed ? '✓' : ''}
         </div>
         <h3 className={`task-title ${task.completed ? 'completed' : ''}`}>
-          {task.text}
+          {task.title} 
         </h3>
       </div>
       

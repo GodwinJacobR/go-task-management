@@ -1,19 +1,19 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Task as TaskType } from '../../types';
+import { formatTimestamp, getRelativeTime } from '../../utils/dateUtils';
 import '../../styles/tasks/TaskDetail.css';
 
 interface TaskDetailProps {
   tasks: TaskType[];
-  onToggleTask: (id: number) => void;
 }
 
-const TaskDetail: React.FC<TaskDetailProps> = ({ tasks, onToggleTask }) => {
+const TaskDetail: React.FC<TaskDetailProps> = ({ tasks }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   
-  const taskId = parseInt(id || '0', 10);
-  const task = tasks.find(t => t.id === taskId);
+  const taskId = id || '0';
+  const task = tasks.find(t => t.taskID === taskId);
 
   if (!task) {
     return (
@@ -43,10 +43,7 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ tasks, onToggleTask }) => {
       <div className="task-detail-content">
         <div className="task-detail-card">
           <div className="task-detail-status">
-            <div 
-              className={`task-checkbox large ${task.completed ? 'checked' : ''}`}
-              onClick={() => onToggleTask(task.id)}
-            >
+            <div className={`task-checkbox large ${task.completed ? 'checked' : ''}`}>
               {task.completed ? '✓' : ''}
             </div>
             <span className="task-status-label">
@@ -55,12 +52,30 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ tasks, onToggleTask }) => {
           </div>
           
           <h2 className={`task-detail-title ${task.completed ? 'completed' : ''}`}>
-            {task.text}
+            {task.title}
           </h2>
           
           <div className="task-detail-meta">
-            <p>Task ID: {task.id}</p>
+            <p>Task ID: {task.taskID}</p>
+            <p>Created: <span title={formatTimestamp(task.createdAt)}>{getRelativeTime(task.createdAt)}</span></p>
+            <p>Last Updated: <span title={formatTimestamp(task.updatedAt)}>{getRelativeTime(task.updatedAt)}</span></p>
           </div>
+
+          {task.subTasks && task.subTasks.length > 0 && (
+            <div className="task-detail-subtasks">
+              <h3>Subtasks</h3>
+              <ul className="subtasks-list">
+                {task.subTasks.map(subtask => (
+                  <li key={subtask.taskID} className={subtask.completed ? 'completed' : ''}>
+                    <div className={`task-checkbox small ${subtask.completed ? 'checked' : ''}`}>
+                      {subtask.completed ? '✓' : ''}
+                    </div>
+                    <span>{subtask.title}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>
