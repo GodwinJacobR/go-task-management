@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -18,7 +19,6 @@ const (
 )
 
 type Message struct {
-	Type    string       `json:"type"`
 	Payload UserPosition `json:"payload"`
 }
 
@@ -32,25 +32,39 @@ func wsHandler(h *handler) func(w http.ResponseWriter, r *http.Request) {
 
 		conn, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
-			http.Error(w, "Error upgrading to WebSocket", http.StatusBadRequest)
+			log.Printf("Error upgrading to WebSocket: %v", err)
 			return
 		}
 
+		var writeMu sync.Mutex
+
 		client := &Client{
 			UserID: userID,
-			Send:   make(chan UserPosition, 256),
+			Send: func(position UserPosition) {
+				writeMu.Lock()
+				defer writeMu.Unlock()
+
+				msg := Message{
+					Payload: position,
+				}
+
+				conn.SetWriteDeadline(time.Now().Add(writeWait))
+
+				if err := conn.WriteJSON(msg); err != nil {
+					log.Printf("Error writing to WebSocket: %v", err)
+				}
+			},
 		}
 
-		h.register <- client
+		h.registerClient(client)
 
-		go writePump(conn, client)
-		go readPump(conn, client, h)
+		readMessages(conn, client, h)
 	}
 }
 
-func readPump(conn *websocket.Conn, client *Client, h *handler) {
+func readMessages(conn *websocket.Conn, client *Client, h *handler) {
 	defer func() {
-		h.unregister <- client
+		h.unregisterClient(client)
 		conn.Close()
 	}()
 
@@ -64,6 +78,7 @@ func readPump(conn *websocket.Conn, client *Client, h *handler) {
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
+			log.Printf("WebSocket error: %v", err)
 			break
 		}
 
@@ -73,47 +88,9 @@ func readPump(conn *websocket.Conn, client *Client, h *handler) {
 			continue
 		}
 
-		if msg.Type == "position_update" {
-			msg.Payload.UserID = client.UserID
-			msg.Payload.Timestamp = time.Now()
+		msg.Payload.UserID = client.UserID
+		msg.Payload.Timestamp = time.Now()
 
-			if err := h.updateUserPosition(context.Background(), msg.Payload); err != nil {
-				log.Printf("Error updating position: %v", err)
-			}
-		}
-	}
-}
-
-func writePump(conn *websocket.Conn, client *Client) {
-	ticker := time.NewTicker(pingPeriod)
-	defer func() {
-		ticker.Stop()
-		conn.Close()
-	}()
-
-	for {
-		select {
-		case position, ok := <-client.Send:
-			conn.SetWriteDeadline(time.Now().Add(writeWait))
-			if !ok {
-				conn.WriteMessage(websocket.CloseMessage, []byte{})
-				return
-			}
-
-			msg := Message{
-				Type:    "position_update",
-				Payload: position,
-			}
-
-			if err := conn.WriteJSON(msg); err != nil {
-				return
-			}
-
-		case <-ticker.C:
-			conn.SetWriteDeadline(time.Now().Add(writeWait))
-			if err := conn.WriteMessage(websocket.PingMessage, nil); err != nil {
-				return
-			}
-		}
+		h.updateUserPosition(context.Background(), msg.Payload)
 	}
 }
