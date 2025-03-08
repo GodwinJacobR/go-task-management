@@ -1,9 +1,13 @@
 // App.tsx
-import React, { useState, FormEvent, useCallback } from 'react';
-import { Task } from './components/tasks';
+import React, { useState, useCallback } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Task, TaskList, ActiveTasks, CompletedTasks, TaskDetail } from './components/tasks';
 import { Task as TaskType } from './types';
+import Navigation from './components/Navigation';
+import { Home } from './components/Home';
 import './styles/tasks/Task.css';
 import './styles/tasks/TaskList.css';
+import './styles/tasks/TaskDetail.css';
 
 function App() {
   const [tasks, setTasks] = useState<TaskType[]>([
@@ -27,27 +31,23 @@ function App() {
     }
   ]);
 
-  const [newTask, setNewTask] = useState<string>('');
   const [nextId, setNextId] = useState<number>(4);
+  const navigate = useNavigate();
 
   // Add new top-level task
-  const addTask = useCallback((e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (newTask.trim() !== '') {
-      const currentId = nextId;
-      setTasks(prevTasks => [
-        ...prevTasks,
-        { 
-          id: currentId, 
-          text: newTask, 
-          completed: false,
-          isExpanded: false 
-        }
-      ]);
-      setNextId(currentId + 1);
-      setNewTask('');
-    }
-  }, [newTask, nextId]);
+  const addTask = useCallback((text: string) => {
+    const currentId = nextId;
+    setTasks(prevTasks => [
+      ...prevTasks,
+      { 
+        id: currentId, 
+        text: text, 
+        completed: false,
+        isExpanded: false 
+      }
+    ]);
+    setNextId(currentId + 1);
+  }, [nextId]);
 
   // Toggle task completion status
   const toggleTask = useCallback((id: number): void => {
@@ -73,41 +73,50 @@ function App() {
 
   return (
     <div className="App">
+      <Navigation />
       <div className="app-container">
-        <header className="app-header">
-          <h1>My Task List</h1>
-          <form onSubmit={addTask} className="add-task-form">
-            <input
-              type="text"
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
-              placeholder="Add a new task"
-              className="add-task-input"
-            />
-            <button 
-              type="submit" 
-              className="add-task-button"
-              disabled={newTask.trim() === ''}
-            >
-              Add Task
-            </button>
-          </form>
-        </header>
-
-        <div className="tasks-grid">
-          {tasks.length === 0 ? (
-            <p className="no-tasks-message">No tasks yet. Add a task to get started!</p>
-          ) : (
-            tasks.map(task => (
-              <Task
-                key={task.id}
-                task={task}
-                onToggleTask={toggleTask}
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <Home 
+                tasks={tasks} 
+                onToggleTask={toggleTask} 
                 onToggleExpand={toggleExpand}
+                onAddTask={addTask}
               />
-            ))
-          )}
-        </div>
+            } 
+          />
+          <Route 
+            path="/active" 
+            element={
+              <ActiveTasks 
+                tasks={tasks} 
+                onToggleTask={toggleTask} 
+                onToggleExpand={toggleExpand} 
+              />
+            } 
+          />
+          <Route 
+            path="/completed" 
+            element={
+              <CompletedTasks 
+                tasks={tasks} 
+                onToggleTask={toggleTask} 
+                onToggleExpand={toggleExpand} 
+              />
+            } 
+          />
+          <Route 
+            path="/task/:id" 
+            element={
+              <TaskDetail 
+                tasks={tasks} 
+                onToggleTask={toggleTask} 
+              />
+            } 
+          />
+        </Routes>
       </div>
     </div>
   );

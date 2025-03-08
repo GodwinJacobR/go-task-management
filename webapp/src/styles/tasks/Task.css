@@ -3,27 +3,38 @@
     background: white;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    padding: 15px;
+    padding: 20px;
     border: 1px solid var(--border-color);
     height: 100%;
     display: flex;
     flex-direction: column;
-  }
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
   
-  .task-tile:hover {
+.task-tile:hover {
     border-color: var(--primary-color);
-  }
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.task-tile:active {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+}
   
-  .task-tile-header {
+.task-tile-header {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
-    gap: 10px;
-  }
+    margin-bottom: 15px;
+    gap: 12px;
+}
   
-  .task-checkbox {
-    width: 20px;
-    height: 20px;
+.task-checkbox {
+    width: 22px;
+    height: 22px;
     border: 2px solid var(--border-color);
     border-radius: 4px;
     display: flex;
@@ -32,37 +43,76 @@
     cursor: pointer;
     flex-shrink: 0;
     font-size: 14px;
-  }
+    transition: all 0.2s ease;
+    z-index: 2;
+}
   
-  .task-checkbox.checked {
+.task-checkbox.checked {
     background-color: var(--success-color);
     border-color: var(--success-color);
     color: white;
-  }
+}
   
-  .task-title {
+.task-title {
     margin: 0;
     font-size: 18px;
     text-align: left;
     flex: 1;
     word-break: break-word;
-  }
+    transition: color 0.2s ease;
+}
   
-  .task-title.completed {
+.task-title.completed {
     text-decoration: line-through;
     color: var(--text-light);
-  }
+}
   
-  .task-tile-content {
+.task-tile-content {
     margin-top: auto;
-  }
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
   
-  .task-status-badge {
+.task-status-badge {
     display: inline-block;
-    padding: 4px 8px;
+    padding: 5px 10px;
     font-size: 12px;
-    border-radius: 4px;
+    border-radius: 20px;
     background-color: var(--light-color);
     color: var(--text-light);
-    margin-top: 10px;
-  } 
+    transition: all 0.2s ease;
+    align-self: flex-start;
+}
+
+.task-tile:hover .task-status-badge {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.view-details-link {
+    display: inline-block;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 5px;
+    transition: all 0.2s ease;
+}
+
+.task-tile:hover .view-details-link {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* Add a subtle indicator for completed tasks */
+.task-tile.completed::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--success-color);
+} 

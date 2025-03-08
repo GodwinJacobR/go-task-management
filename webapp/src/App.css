@@ -1,0 +1,148 @@
+/* Base styles */
+:root {
+  --primary-color: #3498db;
+  --primary-hover: #2980b9;
+  --success-color: #2ecc71;
+  --danger-color: #e74c3c;
+  --warning-color: #f39c12;
+  --light-color: #ecf0f1;
+  --dark-color: #34495e;
+  --text-color: #333;
+  --text-light: #7f8c8d;
+  --border-color: #ddd;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --border-radius: 8px;
+  --tile-transition: all 0.2s ease-in-out;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f7fa;
+  color: var(--text-color);
+}
+
+/* App container */
+.App {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header styles */
+.app-header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.app-header h1 {
+  font-size: 32px;
+  margin-bottom: 25px;
+  color: var(--dark-color);
+  font-weight: 600;
+}
+
+/* Task input form */
+.add-task-form {
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto 40px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  background-color: white;
+  overflow: hidden;
+}
+
+.add-task-input {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  font-size: 16px;
+}
+
+.add-task-input:focus {
+  outline: none;
+}
+
+.add-task-button {
+  padding: 15px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.add-task-button:hover {
+  background-color: var(--primary-hover);
+}
+
+.add-task-button:disabled {
+  background-color: var(--text-light);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* No tasks message */
+.no-tasks-message {
+  text-align: center;
+  padding: 40px;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  grid-column: 1 / -1;
+  color: var(--text-light);
+  font-size: 18px;
+  margin: 20px auto;
+  max-width: 500px;
+  border: 1px dashed var(--border-color);
+  transition: var(--tile-transition);
+}
+
+/* Tasks grid */
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 10px 0;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 20px 15px;
+  }
+
+  .tasks-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .add-task-form {
+    flex-direction: column;
+    margin-bottom: 30px;
+  }
+  
+  .add-task-button {
+    width: 100%;
+    padding: 12px 15px;
+  }
+  
+  .app-header h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+} 
