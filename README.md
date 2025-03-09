@@ -1,9 +1,28 @@
-# App Name
+# Task Management
 
-TODO:
+**TODO**:
 
 - [ ] Build Task Hierarchy from DB
-- [ ] change task id to uuid
 - [ ] use optimistic locking for task update
-- [ ] use websockets for real-time user tracking
 - [ ] add tests
+- [ ] add costs for each task
+- [ ] add documentation and getting started guide
+
+
+**How to run**:
+
+```bash
+make up
+```
+
+
+
+**Features**:
+
+- Live user mouse tracking
+- Retrieve and Create tasks
+
+- Promote or move Tasks (Backend only)
+- Mark all tasks as complete (including subtasks) (Backend only)
+
+
