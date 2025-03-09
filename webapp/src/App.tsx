@@ -1,4 +1,4 @@
-// App.tsx
+
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Task, TaskList, ActiveTasks, CompletedTasks, TaskDetail } from './components/tasks';

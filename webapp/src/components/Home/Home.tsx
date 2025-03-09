@@ -15,7 +15,6 @@ interface MousePosition {
 }
 
 const Home: React.FC<HomeProps> = ({ tasks }) => {
-  // Get a fresh instance of the mouse tracking service for this component
   const mouseTrackingService = React.useMemo(() => getMouseTrackingService(), []);
   
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
@@ -23,29 +22,22 @@ const Home: React.FC<HomeProps> = ({ tasks }) => {
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
   const currentUserId = mouseTrackingService.getUserId();
 
-  // Initialize WebSocket connection
   useEffect(() => {
-    // Connect to WebSocket server
     mouseTrackingService.connect();
 
-    // Add position listener
     const handlePositionsUpdate = (positions: UserPosition[]) => {
-      // Filter out current user's position
       const others = positions.filter(pos => pos.userId !== currentUserId);
       console.log('Other users:', others.length, others);
       setOtherUsers(others);
     };
 
-    // Add connection status listener
     const handleStatusUpdate = (status: ConnectionStatus) => {
       setConnectionStatus(status);
     };
 
-    // Register listeners
     mouseTrackingService.addPositionListener(handlePositionsUpdate);
     mouseTrackingService.addStatusListener(handleStatusUpdate);
 
-    // Cleanup on unmount
     return () => {
       mouseTrackingService.removePositionListener(handlePositionsUpdate);
       mouseTrackingService.removeStatusListener(handleStatusUpdate);
@@ -53,7 +45,6 @@ const Home: React.FC<HomeProps> = ({ tasks }) => {
     };
   }, [mouseTrackingService, currentUserId]);
 
-  // Track mouse movement
   useEffect(() => {
     const handleMouseMove = (event: MouseEvent) => {
       const newPosition = {
@@ -63,7 +54,6 @@ const Home: React.FC<HomeProps> = ({ tasks }) => {
       
       setMousePosition(newPosition);
       
-      // Send position to WebSocket server
       mouseTrackingService.sendMousePosition(newPosition.x, newPosition.y);
     };
 
@@ -74,12 +64,10 @@ const Home: React.FC<HomeProps> = ({ tasks }) => {
     };
   }, [mouseTrackingService]);
 
-  // Format user ID for display
   const formatUserId = (userId: string) => {
     return userId.substring(0, 8);
   };
 
-  // Get connection status display text
   const getConnectionStatusText = () => {
     switch (connectionStatus) {
       case ConnectionStatus.CONNECTING:
@@ -114,7 +102,6 @@ const Home: React.FC<HomeProps> = ({ tasks }) => {
 
       <TaskList tasks={tasks} />
 
-      {/* Current user's mouse indicator */}
       <div 
         className="mouse-indicator current-user"
         style={{
@@ -135,15 +122,14 @@ const Home: React.FC<HomeProps> = ({ tasks }) => {
         </div>
       </div>
 
-      {/* Other users' mouse indicators - display as text instead of dots */}
       {otherUsers.map((user) => (
         <div 
           key={user.userId}
           className="mouse-indicator other-user user-id-display"
           style={{
             position: 'fixed',
-            left: user.longitude, // Use longitude as x coordinate
-            top: user.latitude,   // Use latitude as y coordinate
+            left: user.longitude,
+            top: user.latitude,
             transform: 'translate(-50%, -50%)',
             pointerEvents: 'none',
             zIndex: 9997

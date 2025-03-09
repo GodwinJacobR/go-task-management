@@ -1,7 +1,7 @@
-// WebSocket service for real-time mouse position tracking
+
 import { v4 as uuidv4 } from 'uuid';
 
-// Define the structure of user position data to match the backend
+
 export interface UserPosition {
   userId: string;
   latitude: number;
@@ -9,12 +9,12 @@ export interface UserPosition {
   timestamp: Date;
 }
 
-// Define the message structure for WebSocket communication
+
 interface WebSocketMessage {
   payload: UserPosition;
 }
 
-// WebSocket connection status
+
 export enum ConnectionStatus {
   CONNECTING = 'connecting',
   CONNECTED = 'connected',
@@ -22,7 +22,7 @@ export enum ConnectionStatus {
   ERROR = 'error'
 }
 
-// WebSocket service class
+
 export class MouseTrackingService {
   private socket: WebSocket | null = null;
   private userId: string;
@@ -36,16 +36,16 @@ export class MouseTrackingService {
   private reconnectTimeout: number | null = null;
 
   constructor() {
-    // Generate a new unique user ID for each session
+    
     this.userId = uuidv4();
     console.log('Generated new user ID for this session:', this.userId);
     
-    // Store the timestamp when this instance was created
+    
     this.createdAt = new Date();
     console.log('MouseTrackingService instance created at:', this.createdAt);
   }
 
-  // Connect to the WebSocket server
+  
   public connect(): void {
     if (this.socket) {
       return;
@@ -54,6 +54,7 @@ export class MouseTrackingService {
     this.updateStatus(ConnectionStatus.CONNECTING);
     
     const wsUrl = `ws//localhost:3001/ws/track?user_id=${this.userId}`;
+
     
     console.log('Connecting to WebSocket at:', wsUrl);
     
@@ -71,13 +72,13 @@ export class MouseTrackingService {
     }
   }
 
-  // Handle WebSocket open event
+  
   private handleOpen(): void {
     console.log('WebSocket connection established');
     this.updateStatus(ConnectionStatus.CONNECTED);
     this.reconnectAttempts = 0;
     
-    // Send initial position to announce presence
+    
     const initialPosition = {
       latitude: 0,
       longitude: 0
@@ -85,44 +86,44 @@ export class MouseTrackingService {
     this.sendMousePosition(initialPosition.longitude, initialPosition.latitude);
   }
 
-  // Handle WebSocket close event
+  
   private handleClose(event: CloseEvent): void {
     console.log('WebSocket connection closed with code:', event.code, 'reason:', event.reason);
     this.updateStatus(ConnectionStatus.DISCONNECTED);
     this.socket = null;
     
-    // Attempt to reconnect
+    
     this.attemptReconnect();
   }
 
-  // Handle WebSocket error event
+  
   private handleError(event: Event): void {
     console.error('WebSocket error:', event);
     this.updateStatus(ConnectionStatus.ERROR);
   }
 
-  // Handle WebSocket message event
+  
   private handleMessage(event: MessageEvent): void {
     try {
       console.log('Received WebSocket message:', event.data);
       const message: WebSocketMessage = JSON.parse(event.data);
       const position = message.payload;
       
-      // Update the position with the timestamp
+      
       position.timestamp = new Date(position.timestamp);
       
-      // Store the position
+      
       this.userPositions.set(position.userId, position);
       console.log('Updated positions map, now tracking', this.userPositions.size, 'users');
       
-      // Notify listeners
+      
       this.notifyListeners();
     } catch (error) {
       console.error('Error parsing WebSocket message:', error);
     }
   }
 
-  // Attempt to reconnect to the WebSocket server
+  
   private attemptReconnect(): void {
     if (this.reconnectTimeout !== null) {
       clearTimeout(this.reconnectTimeout);
@@ -141,7 +142,7 @@ export class MouseTrackingService {
     }
   }
 
-  // Disconnect from the WebSocket server
+  
   public disconnect(): void {
     if (this.reconnectTimeout !== null) {
       clearTimeout(this.reconnectTimeout);
@@ -155,17 +156,12 @@ export class MouseTrackingService {
     }
   }
 
-  // Send the current mouse position to the server
-  // Convert screen coordinates to latitude/longitude format
   public sendMousePosition(x: number, y: number): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-      // Convert screen coordinates to latitude/longitude format
-      // For simplicity, we're using the screen coordinates directly
-      // In a real app, you might want to normalize these values
       const position: UserPosition = {
         userId: this.userId,
-        latitude: y,  // Using y as latitude
-        longitude: x, // Using x as longitude
+        latitude: y,
+        longitude: x,
         timestamp: new Date()
       };
       
@@ -181,67 +177,65 @@ export class MouseTrackingService {
     }
   }
 
-  // Get all current user positions
   public getAllPositions(): UserPosition[] {
     return Array.from(this.userPositions.values());
   }
 
-  // Get the current user's ID
   public getUserId(): string {
     return this.userId;
   }
 
-  // Get the current connection status
+  
   public getConnectionStatus(): ConnectionStatus {
     return this.connectionStatus;
   }
 
-  // Add a listener for position updates
+  
   public addPositionListener(listener: (positions: UserPosition[]) => void): void {
     this.listeners.push(listener);
-    // Immediately notify with current positions
+    
     listener(this.getAllPositions());
   }
 
-  // Remove a position listener
+  
   public removePositionListener(listener: (positions: UserPosition[]) => void): void {
     this.listeners = this.listeners.filter(l => l !== listener);
   }
 
-  // Add a listener for connection status updates
+  
   public addStatusListener(listener: (status: ConnectionStatus) => void): void {
     this.statusListeners.push(listener);
-    // Immediately notify with current status
+    
     listener(this.connectionStatus);
   }
 
-  // Remove a status listener
+  
   public removeStatusListener(listener: (status: ConnectionStatus) => void): void {
     this.statusListeners = this.statusListeners.filter(l => l !== listener);
   }
 
-  // Update the connection status and notify listeners
+  
   private updateStatus(status: ConnectionStatus): void {
     this.connectionStatus = status;
     this.statusListeners.forEach(listener => listener(status));
   }
 
-  // Notify all position listeners
+  
   private notifyListeners(): void {
     const positions = this.getAllPositions();
     this.listeners.forEach(listener => listener(positions));
   }
 }
 
-// Create a factory function to get a new instance for each tab
-// This ensures a new user ID is generated for each browser tab
+
+
 let serviceInstance: MouseTrackingService | null = null;
 
 export function getMouseTrackingService(): MouseTrackingService {
   if (!serviceInstance) {
     serviceInstance = new MouseTrackingService();
     
-    // Clear the instance when the tab is closed or refreshed
+    
     window.addEventListener('beforeunload', () => {
       if (serviceInstance) {
         serviceInstance.disconnect();
@@ -253,6 +247,6 @@ export function getMouseTrackingService(): MouseTrackingService {
   return serviceInstance;
 }
 
-// For backward compatibility
+
 const mouseTrackingService = getMouseTrackingService();
 export default mouseTrackingService; 
