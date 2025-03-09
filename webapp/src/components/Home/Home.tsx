@@ -3,10 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { TaskList } from '../../components/tasks';
 import { Task as TaskType } from '../../types';
 import { getMouseTrackingService, UserPosition, ConnectionStatus } from '../../services/websocket';
+import { addTask } from '../../services/api';
 import './Home.css';
 
 interface HomeProps {
   tasks: TaskType[];
+  refreshTasks: () => Promise<void>;
 }
 
 interface MousePosition {
@@ -14,13 +16,17 @@ interface MousePosition {
   y: number;
 }
 
-const Home: React.FC<HomeProps> = ({ tasks }) => {
+const Home: React.FC<HomeProps> = ({ tasks, refreshTasks }) => {
   const mouseTrackingService = React.useMemo(() => getMouseTrackingService(), []);
   
   const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
   const [otherUsers, setOtherUsers] = useState<UserPosition[]>([]);
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
   const currentUserId = mouseTrackingService.getUserId();
+  
+  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     mouseTrackingService.connect();
@@ -83,6 +89,31 @@ const Home: React.FC<HomeProps> = ({ tasks }) => {
     }
   };
 
+  const handleSubmitTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!newTaskTitle.trim()) {
+      setError('Task title cannot be empty');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setError(null);
+    
+    try {
+      await addTask(newTaskTitle);
+      setNewTaskTitle('');
+      
+      // Refresh the task list
+      await refreshTasks();
+    } catch (err) {
+      setError('Failed to create task. Please try again.');
+      console.error('Error creating task:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="home-container">
       <header className="app-header">
@@ -99,6 +130,30 @@ const Home: React.FC<HomeProps> = ({ tasks }) => {
           </div>
         </div>
       </header>
+
+      <div className="task-creation-container">
+        <h2>Create New Task</h2>
+        <form onSubmit={handleSubmitTask} className="task-form">
+          <div className="form-group">
+            <input
+              type="text"
+              value={newTaskTitle}
+              onChange={(e) => setNewTaskTitle(e.target.value)}
+              placeholder="Enter task title..."
+              className="task-input"
+              disabled={isSubmitting}
+            />
+            <button 
+              type="submit" 
+              className="task-submit-btn"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Creating...' : 'Add Task'}
+            </button>
+          </div>
+          {error && <div className="error-message">{error}</div>}
+        </form>
+      </div>
 
       <TaskList tasks={tasks} />
 

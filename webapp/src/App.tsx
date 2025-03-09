@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Task, TaskList, ActiveTasks, CompletedTasks, TaskDetail } from './components/tasks';
 import { Task as TaskType } from './types';
@@ -13,44 +12,51 @@ import './styles/tasks/TaskDetail.css';
 
 function App() {
   const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getTasks = async () => {
-      try {
-        const data = await fetchTasks();
-        setTasks(data);
-        console.log(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getTasks();
+  const loadTasks = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await fetchTasks();
+      setTasks(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadTasks();
+  }, [loadTasks]);
 
   return (
     <div className="App">
       <Navigation />
       <div className="app-container">
-        <Routes>
-          <Route 
-            path="/" 
-            element={<Home tasks={tasks} />} 
-          />
-          <Route 
-            path="/active" 
-            element={<ActiveTasks tasks={tasks} />} 
-          />
-          <Route 
-            path="/completed" 
-            element={<CompletedTasks tasks={tasks} />} 
-          />
-          <Route 
-            path="/task/:id" 
-            element={<TaskDetail tasks={tasks} />} 
-          />
-        </Routes>
+        {isLoading ? (
+          <div className="loading-indicator">Loading tasks...</div>
+        ) : (
+          <Routes>
+            <Route 
+              path="/" 
+              element={<Home tasks={tasks} refreshTasks={loadTasks} />} 
+            />
+            <Route 
+              path="/active" 
+              element={<ActiveTasks tasks={tasks} />} 
+            />
+            <Route 
+              path="/completed" 
+              element={<CompletedTasks tasks={tasks} />} 
+            />
+            <Route 
+              path="/task/:id" 
+              element={<TaskDetail tasks={tasks} />} 
+            />
+          </Routes>
+        )}
       </div>
     </div>
   );

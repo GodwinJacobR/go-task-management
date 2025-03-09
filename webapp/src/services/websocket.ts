@@ -108,15 +108,9 @@ export class MouseTrackingService {
       console.log('Received WebSocket message:', event.data);
       const message: WebSocketMessage = JSON.parse(event.data);
       const position = message.payload;
-      
-      
       position.timestamp = new Date(position.timestamp);
-      
-      
       this.userPositions.set(position.userId, position);
       console.log('Updated positions map, now tracking', this.userPositions.size, 'users');
-      
-      
       this.notifyListeners();
     } catch (error) {
       console.error('Error parsing WebSocket message:', error);
