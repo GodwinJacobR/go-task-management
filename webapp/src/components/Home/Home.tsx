@@ -121,12 +121,6 @@ const Home: React.FC<HomeProps> = ({ tasks, refreshTasks }) => {
       <header className="app-header">
         <h1>My Task List</h1>
         <div className="mouse-tracker-controls">
-          <div className={`connection-status status-${connectionStatus}`}>
-            Status: {getConnectionStatusText()}
-          </div>
-          <div className="users-count">
-            Other Users: {otherUsers.length}
-          </div>
           <div className="current-user-id">
             Your ID: {formatUserId(currentUserId)}
           </div>
