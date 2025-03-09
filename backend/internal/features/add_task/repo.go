@@ -44,7 +44,7 @@ func (r *repo) addTask(ctx context.Context, task task.Task) error {
 
 	_, err = r.db.ExecContext(ctx,
 		query,
-		time.Now().Second(), // task.TaskID,
+		task.TaskID,
 		task.UserID,
 		task.Title,
 		task.Description,

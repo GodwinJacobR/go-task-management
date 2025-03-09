@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS tasks (
-    task_id SERIAL PRIMARY KEY,
+    task_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
-    parent_task_id INTEGER,
+    parent_task_id UUID,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     due_date DATE,
