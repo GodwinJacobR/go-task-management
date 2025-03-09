@@ -1,6 +1,6 @@
 // components/Home.tsx
 import React, { useState, useEffect } from 'react';
-import { TaskList } from '../../components/tasks';
+import { Task, TaskList } from '../../components/tasks';
 import { Task as TaskType } from '../../types';
 import { getMouseTrackingService, UserPosition, ConnectionStatus } from '../../services/websocket';
 import { addTask } from '../../services/api';
@@ -93,7 +93,6 @@ const Home: React.FC<HomeProps> = ({ tasks, refreshTasks }) => {
     e.preventDefault();
     
     if (!newTaskTitle.trim()) {
-      setError('Task title cannot be empty');
       return;
     }
     
@@ -101,14 +100,17 @@ const Home: React.FC<HomeProps> = ({ tasks, refreshTasks }) => {
     setError(null);
     
     try {
-      await addTask(newTaskTitle);
+      await addTask({
+        description: "",
+        title: newTaskTitle,
+        userid: currentUserId,
+      });
       setNewTaskTitle('');
       
-      // Refresh the task list
       await refreshTasks();
     } catch (err) {
-      setError('Failed to create task. Please try again.');
       console.error('Error creating task:', err);
+      setError('Failed to create task. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -146,7 +148,7 @@ const Home: React.FC<HomeProps> = ({ tasks, refreshTasks }) => {
             <button 
               type="submit" 
               className="task-submit-btn"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !newTaskTitle.trim()}
             >
               {isSubmitting ? 'Creating...' : 'Add Task'}
             </button>

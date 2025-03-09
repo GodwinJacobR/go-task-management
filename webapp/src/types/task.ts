@@ -6,3 +6,10 @@ export interface Task {
     updatedAt: string;
     subTasks: Task[];
   } 
+
+
+  export interface CreateTaskRequest {
+    userid: string;
+    title: string;
+    description: string;
+  } 
