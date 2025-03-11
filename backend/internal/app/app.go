@@ -2,6 +2,7 @@ package app
 
 import (
 	"errors"
+	"net/http"
 
 	"github.com/GodwinJacobR/go-todo-app/backend/internal/db"
 	"github.com/GodwinJacobR/go-todo-app/backend/internal/features/add_task"
@@ -39,6 +40,12 @@ func (a *App) Start() error {
 }
 
 func (a *App) setupFeatures() error {
+	// Add a health endpoint
+	a.router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(`{"status":"ok"}`))
+	}).Methods(http.MethodGet)
+
 	return errors.Join(
 		get_tasks.Setup(a.router, a.db.GetDB()),
 		add_task.Setup(a.router, a.db.GetDB()),

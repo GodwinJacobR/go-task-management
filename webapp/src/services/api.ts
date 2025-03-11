@@ -2,7 +2,7 @@ import { Task, CreateTaskRequest } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'http://localhost:8080';
 
 export const fetchTasks = async (): Promise<Task[]> => {
   try {

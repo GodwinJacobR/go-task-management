@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"net/http"
 
@@ -19,12 +20,13 @@ func New(router *mux.Router) *HttpServer {
 	return &HttpServer{
 		inner: &http.Server{
 			Handler: router,
-			Addr:    net.JoinHostPort("localhost", "3001"), // TODO get from config
+			Addr:    net.JoinHostPort("0.0.0.0", "8080"), // TODO get from config
 		},
 	}
 }
 
 func (s *HttpServer) Start() error {
+	fmt.Printf("Starting HTTP server on: 0.0.0.0:8080\n")
 	go func() {
 		if err := s.inner.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			panic(err)

@@ -53,7 +53,7 @@ export class MouseTrackingService {
 
     this.updateStatus(ConnectionStatus.CONNECTING);
     
-    const wsUrl = `ws//localhost:3001/ws/track?user_id=${this.userId}`;
+    const wsUrl = `ws//localhost:8080/ws/track?user_id=${this.userId}`;
 
     
     console.log('Connecting to WebSocket at:', wsUrl);

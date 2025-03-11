@@ -8,7 +8,7 @@ import (
 	"github.com/GodwinJacobR/go-todo-app/backend/internal/server"
 )
 
-const serverURL = "http://localhost:3001"
+const serverURL = "http://localhost:8080"
 
 func TestMain(m *testing.M) {
 
