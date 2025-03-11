@@ -26,6 +26,7 @@ func (h *handler) getTask(ctx context.Context, taskID string) (task.TaskResponse
 	taskResponse := task.TaskResponse{
 		TaskID:      taskFromDB.TaskID,
 		Title:       taskFromDB.Title,
+		Completed:   taskFromDB.Completed,
 		Description: taskFromDB.Description,
 		CreatedAt:   taskFromDB.CreatedAt,
 		UpdatedAt:   taskFromDB.UpdatedAt,

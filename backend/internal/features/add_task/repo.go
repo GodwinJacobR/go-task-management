@@ -50,9 +50,9 @@ func (r *repo) addTask(ctx context.Context, task task.Task) error {
 		task.Description,
 		task.DueDate,
 		task.Completed,
-		attributesJSON, // JSONB column
-		now,            // created_at
-		now,            // updated_at
+		attributesJSON,
+		now,
+		now,
 	)
 
 	return err

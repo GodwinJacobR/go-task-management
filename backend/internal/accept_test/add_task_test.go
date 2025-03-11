@@ -24,21 +24,17 @@ func TestAddTask(t *testing.T) {
 		}
 		expectedStatus := http.StatusCreated
 
-		// Create the task
 		resp := createTask(t, taskID, taskData)
 
-		// Check status code
 		if resp.StatusCode != expectedStatus {
 			t.Errorf("Expected status %d, got %d", expectedStatus, resp.StatusCode)
 		}
 
-		// Verify the task was created correctly
 		verifyTaskExists(t, taskID, taskData)
 	})
 
 }
 
-// TestAddTaskInvalidBody tests adding a task with invalid request body
 func TestAddTaskInvalidBody(t *testing.T) {
 	invalidJSON := []byte(`{"title": "Invalid JSON`)
 

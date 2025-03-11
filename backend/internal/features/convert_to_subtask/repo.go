@@ -38,5 +38,3 @@ func (r *repo) convertToSubTask(ctx context.Context, taskID, newParentTaskID str
 
 	return nil
 }
-
-// ... existing code ...
