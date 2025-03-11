@@ -23,6 +23,7 @@ make up
 - Retrieve and Create tasks
 
 - Promote or move Tasks (Backend only)
+    - Added tests to simulate multiple parallel requests to this
 - Mark all tasks as complete (including subtasks) (Backend only)
 
 
