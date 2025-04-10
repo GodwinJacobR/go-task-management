@@ -1,3 +1,4 @@
+A simple task manager web application that uses Go and React
 
 # Task Management
 
